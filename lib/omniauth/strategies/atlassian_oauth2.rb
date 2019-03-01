@@ -37,18 +37,17 @@ module OmniAuth
              prompt: 'consent',
              audience: 'api.atlassian.com'
 
-      def request_phase
-        url = client.auth_code.authorize_url({:redirect_uri => callback_url}.merge(authorize_params))
-        puts "redirecting to"
-        puts url
-        redirect url
+      uid do
+        raw_info['myself']['accountId']
       end
-
-      uid { raw_info['sub'] }
 
       info do
         {
-          name: raw_info['name']
+          name: raw_info['myself']['displayName'],
+          email: raw_info['myself']['emailAddress'],
+          nickname: raw_info['myself']['name'],
+          location: raw_info['myself']['timeZone'],
+          image: raw_info['myself']['avatarUrls']['48x48']
         }
       end
 
@@ -59,7 +58,33 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= JSON.parse(access_token.get('/rest/api/3/myself')).body
+        # NOTE: api.atlassian.com, not auth.atlassian.com!
+        accessible_resources_url = 'https://api.atlassian.com/oauth/token/accessible-resources'
+        sites = JSON.parse(access_token.get(accessible_resources_url).body)
+
+        # Jira's OAuth gives us many potential sites. To request information
+        # about the user for the OmniAuth hash, pick the first one that has the
+        # necessary 'read:jira-user' scope.
+
+        jira_user_scope = 'read:jira-user'
+        site = sites.find do |candidate_site|
+          candidate_site['scopes'].include?(jira_user_scope)
+        end
+        unless site
+          raise "No site found with scope #{jira_user_scope}, please ensure the scope ${jira_user_scope} is added to your OmniAuth config"
+        end
+
+        cloud_id = site['id']
+        base_url = "https://api.atlassian.com/ex/jira/#{cloud_id}"
+        myself_url = "#{base_url}/rest/api/3/myself"
+
+        myself = JSON.parse(access_token.get(myself_url).body)
+
+        @raw_info ||= {
+          'site' => site,
+          'sites' => sites,
+          'myself' => myself
+        }
       end
     end
   end
