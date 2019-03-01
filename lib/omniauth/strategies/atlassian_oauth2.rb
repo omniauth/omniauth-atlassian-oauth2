@@ -31,7 +31,7 @@ module OmniAuth
       option :client_options,
              site: 'https://auth.atlassian.com',
              authorize_url: 'https://auth.atlassian.com/authorize',
-             token_url: 'https://auth.atlassian.com/oauth2/token',
+             token_url: 'https://auth.atlassian.com/oauth/token',
              audience: 'api.atlassian.com'
       option :authorize_params,
              prompt: 'consent',
