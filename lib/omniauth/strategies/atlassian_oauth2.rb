@@ -44,6 +44,8 @@ module OmniAuth
       end
 
       def raw_info
+        return @raw_info if @raw_info
+
         # NOTE: api.atlassian.com, not auth.atlassian.com!
         accessible_resources_url = 'https://api.atlassian.com/oauth/token/accessible-resources'
         sites = JSON.parse(access_token.get(accessible_resources_url).body)
@@ -51,7 +53,6 @@ module OmniAuth
         # Jira's OAuth gives us many potential sites. To request information
         # about the user for the OmniAuth hash, pick the first one that has the
         # necessary 'read:jira-user' scope.
-
         jira_user_scope = 'read:jira-user'
         site = sites.find do |candidate_site|
           candidate_site['scopes'].include?(jira_user_scope)
