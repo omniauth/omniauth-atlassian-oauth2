@@ -80,7 +80,7 @@ continues to have access to the sites you expect.
 
 ```ruby
 {
-  "provider" => "google_oauth2",
+  "provider" => "atlassian_oauth2",
   "uid" => "100000000000000000000",
   "info" => {
     "name" => "John Smith",
