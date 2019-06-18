@@ -42,9 +42,9 @@ Here's an example for adding the middleware to a Rails app in
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :atlassian_oauth2, ENV['ATLASSIAN_CLIENT_ID'], ENV['ATLASSIAN_CLIENT_SECRET']
+  provider :atlassian_oauth2, ENV['ATLASSIAN_CLIENT_ID'], ENV['ATLASSIAN_CLIENT_SECRET'],
     scope: "offline_access read:jira-user read:jira-work",
-    prompt: "consent",
+    prompt: "consent"
 end
 ```
 
