@@ -11,9 +11,9 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
   gem.summary       = %(An Atlassian OAuth2 strategy for OmniAuth 1.x)
   gem.description   = %(An Atlassian OAuth2 strategy for OmniAuth 1.x. This allows you to login to Atlassian with your ruby app.)
-  gem.authors       = ['Ben Standefer']
-  gem.email         = ['benstandefer@gmail.com']
-  gem.homepage      = 'https://github.com/aguynamedben/omniauth-atlassian-oauth2'
+  gem.authors       = ['Ben Standefer', 'Jessie A. Young']
+  gem.email         = ['benstandefer@gmail.com', 'jessieyoung@gitlab.com']
+  gem.homepage      = 'https://github.com/omniauth/omniauth-atlassian-oauth2'
 
   gem.files         = `git ls-files`.split("\n")
   gem.require_paths = ['lib']
